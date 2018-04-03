@@ -59,36 +59,35 @@ double convert(const Temperature& Temp ,char scale_to) {
     case 'C':
     case 'c':
         return T_Kel - 273.15;
-        break;
+
     case 'K':
     case 'k':
         return T_Kel;
-        break;
+
     case 'F':
     case 'f':
         return ((9.0 / 5) * (T_Kel - 273.15) + 32);
-        break;
-    }
-    bool operator<(const Temperature& lhs, const Temperature& rhs) {
-        return convert(lhs, 'K') < convert(rhs, 'K');
-    }
 
-    Temperature operator-(const Temperature& lhs, const Temperature& rhs) {
-        Temperature ret_temp;
-        ret_temp.temp = convert(lhs, 'K') - convert(rhs, 'K');
-        ret_temp.scale = 'K';
-        return ret_temp;
-    }
-
-    Temperature operator/(const Temperature& lhs, const Temperature& rhs) {
-        Temperature ret_temp;
-        ret_temp.temp = convert(lhs, 'K') / convert(rhs, 'K');
-        ret_temp.scale = 'K';
-        return ret_temp;
     }
 
 }
+bool operator<(const Temperature& lhs, const Temperature& rhs) {
+    return convert(lhs, 'K') < convert(rhs, 'K');
+}
 
+Temperature operator-(const Temperature& lhs, const Temperature& rhs) {
+    Temperature ret_temp;
+    ret_temp.temp = convert(lhs, 'K') - convert(rhs, 'K');
+    ret_temp.scale = 'K';
+    return ret_temp;
+}
+
+Temperature operator/(const Temperature& lhs, const Temperature& rhs) {
+    Temperature ret_temp;
+    ret_temp.temp = convert(lhs, 'K') / convert(rhs, 'K');
+    ret_temp.scale = 'K';
+    return ret_temp;
+}
 
 
 int    main() {
