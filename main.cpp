@@ -36,25 +36,60 @@ void test_temperature_input(){
     assert(Temp.scale=='F');
 };
 
-double convert(const Temperature& Temp ,char scale_to){
+double convert(const Temperature& Temp ,char scale_to) {
     double T_Kel;
-    T_Kel=Temp.temp;
-    switch(Temp.scale){
+    if ((scale_to) == (Temp.scale)) {
+        return Temp.temp;
+    }
+    switch (Temp.scale) {
     case 'C':
-        T_Kel+=273;
+        T_Kel = Temp.temp - 273.15;
         break;
 
     case 'F':
-        T_Kel=((9.0/5)*(T_Kel-273)+32);
+        T_Kel = ((9.0 / 5) * (Temp.temp - 273.15) + 32);
         break;
 
     case 'K':
-        T_Kel=T_Kel;
+        T_Kel = Temp.temp;
         break;
 
     }
+    switch (scale_to) {
+    case 'C':
+    case 'c':
+        return T_Kel - 273.15;
+        break;
+    case 'K':
+    case 'k':
+        return T_Kel;
+        break;
+    case 'F':
+    case 'f':
+        return ((9.0 / 5) * (T_Kel - 273.15) + 32);
+        break;
+    }
+    bool operator<(const Temperature& lhs, const Temperature& rhs) {
+        return convert(lhs, 'K') < convert(rhs, 'K');
+    }
+
+    Temperature operator-(const Temperature& lhs, const Temperature& rhs) {
+        Temperature ret_temp;
+        ret_temp.temp = convert(lhs, 'K') - convert(rhs, 'K');
+        ret_temp.scale = 'K';
+        return ret_temp;
+    }
+
+    Temperature operator/(const Temperature& lhs, const Temperature& rhs) {
+        Temperature ret_temp;
+        ret_temp.temp = convert(lhs, 'K') / convert(rhs, 'K');
+        ret_temp.scale = 'K';
+        return ret_temp;
+    }
 
 }
+
+
 
 int    main() {
 
@@ -62,7 +97,7 @@ int    main() {
 
 
         /*
-    size_t count;
+      size_t count;
     string otvet;
     cerr<<"\n chislo el";
     cin >> count;
@@ -76,6 +111,7 @@ int    main() {
     {
         cerr<<"\n chislo stolbtsov";
         cin >> col_count;
+        cerr<<"\n";
         double min = el[0], max = el[0];
         for (double x:el) {
             if (x < min) {
@@ -93,20 +129,37 @@ int    main() {
             }
             bins[index]++;
         }
+        float maxb;
+        double kf;
+        maxb=bins[0];
+        for (float x:bins)
+        {
+           if(maxb<x)
+               maxb=x;
+        }
+        kf=1;
+        if(maxb>76)
+            kf=(double)(1-(maxb-76)/(maxb));
+
         for (size_t i = 0; i < col_count; i++) {
+            if(i>0)
+                cout<<"\n";
             if (bins[i] >= 100)
-                cout << "\n" << bins[i] << "|";
+            {
+                cout<<  bins[i] << "|";
+            }
             else if (bins[i] >= 10)
-                cout << "\n " << bins[i] << "|";
+                cout << " "<< bins[i] << "|";
             else
-                cout << "\n  " << bins[i] << "|";
-            for (size_t k = 0; k < bins[i]; k++) {
+                cout <<"  " << bins[i] << "|";
+            for (size_t k = 0; k < bins[i]*kf; k++) {
                 cout << "*";
             }
         }
-        cout<<"\n dovolni li vi resultatom\n";
+        cerr<<"\n dovolni li vi resultatom\n";
         cin>>otvet;
     }
-    while (otvet=="net");*/
+    while (otvet=="net");
+    */
     return 0;
 }
