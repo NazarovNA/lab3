@@ -1,17 +1,24 @@
+//#pragma once
 
-#ifndef UNTITLED1_TEMPERATURE_H
-#define UNTITLED1_TEMPERATURE_H
+#ifndef UNTITLED_TEMPERATURE_H
+#define UNTITLED_TEMPERATURE_H
 #include <sstream>
 #include <iostream>
-
-struct Temperature{
+using namespace std;
+enum Scale{
+    Kelvin = 'K',
+    Celsus = 'C',
+    Farenheit = 'F',
+};
+struct Temperature {
     double temp;
     char scale;
 };
-istream& operator >> (istream& in,Temperature & Temp);
+
+istream& operator >> (istream& in, Temperature& Temp);
 bool operator<(const Temperature& lhs, const Temperature& rhs);
 Temperature operator-(const Temperature& lhs, const Temperature& rhs);
 Temperature operator/(const Temperature& lhs, const Temperature& rhs);
 Temperature operator*(const Temperature& lhs, const Temperature& rhs);
-double convert(const Temperature& Temp ,char scale_to);
-#endif //UNTITLED1_TEMPERATURE_H
+double convert(const Temperature& Temp, char scale_to);
+#endif //UNTITLED_TEMPERATURE_H

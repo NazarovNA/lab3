@@ -6,40 +6,20 @@
 using namespace std;
 char Scale[]="CKF";
 
-void test_temperature_input(){
-    Temperature Temp;
-    string inp="10C";
-    istringstream iss(inp);
-    iss>>Temp;
-    assert(Temp.temp==10);
-    assert(Temp.scale=='C');
-
-        istringstream iss1("0K");
-    iss1>>Temp;
-    assert(Temp.temp==0);
-    assert(Temp.scale=='K');
-
-      istringstream iss2("-400F");
-    iss2>>Temp;
-    assert(Temp.temp==-400);
-    assert(Temp.scale=='F');
-};
-
 int    main() {
 
-    test_temperature_input();
-
-
-
-      size_t count;
+    size_t count;
     string otvet;
     cerr<<"\n chislo el";
     cin >> count;
-    vector<double> el(count);
+    vector<Temperature> el(count);
     cerr<<"\n vvedite "<<count<<" elementov";
     for (size_t i = 0; i < count; i++) {
-        cin >> el[i];
 
+        cin >> el[i];
+        if (cin.fail()) {return -1;}
+
+        convert(el[i],'K');
     }
     size_t col_count;
     do
@@ -47,19 +27,19 @@ int    main() {
         cerr<<"\n chislo stolbtsov";
         cin >> col_count;
         cerr<<"\n";
-        double min = el[0], max = el[0];
-        for (double x:el) {
-            if (x < min) {
-                min = x;
+        double  min = el[0].temp, max = el[0].temp;
+        for (Temperature x:el) {
+            if (x.temp < min) {
+                min = x.temp;
             }
-            else if (x > max) {
-                max = x;
+            else if (x.temp > max) {
+                max = x.temp;
             }
         }
         vector<size_t> bins(col_count, 0);
-        for (double x:el) {
-            size_t index = (x - min) / (max - min) * col_count;
-            if (x == max) {
+        for (Temperature x:el) {
+            size_t index = (x.temp - min) / (max - min) * col_count;
+            if (x.temp == max) {
                 index--;
             }
             bins[index]++;
@@ -69,8 +49,8 @@ int    main() {
         maxb=bins[0];
         for (float x:bins)
         {
-           if(maxb<x)
-               maxb=x;
+            if(maxb<x)
+                maxb=x;
         }
         kf=1;
         if(maxb>76)
